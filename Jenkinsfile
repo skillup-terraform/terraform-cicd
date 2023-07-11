@@ -2,17 +2,16 @@ pipeline {
     agent any
 
     stages {
-        stage('ST1 Checkout') {
+        stage('Checkout') {
             steps {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/skillup-terraform/terraform-cicd']]])            
 
           }
         }
         
-        stage ("ST2 terraform init") {
+        stage ("terraform init") {
             steps {
                 sh ('terraform init') 
-                if 
             }
         }
         stage ("terraform validate") {
