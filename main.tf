@@ -25,7 +25,7 @@ resource "aws_instance" "ec2_test-01" {
   ami = "ami-074dc0a6f6c764218"
   instance_type = "t2.micro"
   subnet_id = "subnet-00d2838782fa3ecee"
-  vpc_security_group_ids = ["sg-075d9dc319f0a8390"]
+  vpc_security_group_ids = var.sg #["sg-075d9dc319f0a8390"]
   tags = {
     Name = "CICD"
   }
