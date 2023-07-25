@@ -27,7 +27,7 @@ resource "aws_instance" "ec2_test-01" {
   subnet_id = "subnet-00d2838782fa3ecee"
   vpc_security_group_ids = var.security_group #["sg-075d9dc319f0a8390"]
   tags = {
-    Name = "CICD"
+    Name = "CICD-123"
   }
 }
 
