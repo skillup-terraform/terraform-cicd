@@ -23,7 +23,7 @@ resource "aws_security_group" "terra-sg-01" {
 
 resource "aws_instance" "ec2_test-01" {
   ami = "ami-074dc0a6f6c764218"
-  instance_type = "t2.micro"
+  instance_type = var.instance_type
   subnet_id = "subnet-00d2838782fa3ecee"
   vpc_security_group_ids = ["sg-075d9dc319f0a8390"]
   tags = {
