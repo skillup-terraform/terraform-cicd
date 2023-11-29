@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    
+    triggers {
+        githubPush(branchFilter: 'main')
+    }
 
     stages {
         stage('Checkout') {
