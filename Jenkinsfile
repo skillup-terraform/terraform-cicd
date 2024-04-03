@@ -11,7 +11,7 @@ pipeline {
         
         stage ("terraform init") {
             steps {
-                cmd ('terraform init') 
+                bat ('terraform init') 
             }
         }
         stage ("terraform validate") {
