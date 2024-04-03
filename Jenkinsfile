@@ -17,20 +17,20 @@ pipeline {
         stage ("terraform validate") {
             steps {
                 echo "Terraform action is --> validate"
-                cmd ('terraform validate') 
+                bat ('terraform validate') 
            }
         }
         stage ("terraform plan") {
             steps {
                 echo "Terraform action is --> plan"
-                cmd ('terraform plan') 
+                bat ('terraform plan') 
            }
         }
 
         stage ("terraform apply") {
             steps {
                 echo "Terraform action is --> apply"
-                cmd ('terraform destroy --auto-approve') 
+                bat ('terraform destroy --auto-approve') 
            }
         }
     }
