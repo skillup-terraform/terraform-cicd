@@ -11,26 +11,26 @@ pipeline {
         
         stage ("terraform init") {
             steps {
-                sh ('terraform init') 
+                cmd ('terraform init') 
             }
         }
         stage ("terraform validate") {
             steps {
                 echo "Terraform action is --> validate"
-                sh ('terraform validate') 
+                cmd ('terraform validate') 
            }
         }
         stage ("terraform plan") {
             steps {
                 echo "Terraform action is --> plan"
-                sh ('terraform plan') 
+                cmd ('terraform plan') 
            }
         }
 
         stage ("terraform apply") {
             steps {
                 echo "Terraform action is --> apply"
-                sh ('terraform destroy --auto-approve') 
+                cmd ('terraform destroy --auto-approve') 
            }
         }
     }
