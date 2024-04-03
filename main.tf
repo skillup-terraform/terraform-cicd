@@ -20,7 +20,7 @@ resource "aws_security_group" "terra-sg-01" {
   }
 
 }
-
+/*
 resource "aws_instance" "ec2_test-01" {
   ami = "ami-074dc0a6f6c764218"
   instance_type = var.instance_type
@@ -42,3 +42,4 @@ resource "aws_s3_bucket" "b" {
     aws_instance.ec2_test-01
   ]
 }
+*/
