@@ -16,4 +16,4 @@ stages:
       - job: testJob
         displayName: 'TEST JOB'
         steps:
-          - script: echo "THIS IS TEST JOB"
+          - script: echo "THIS IS TEST JOB..."
