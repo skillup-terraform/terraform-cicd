@@ -16,4 +16,7 @@ stages:
       - job: testJob
         displayName: 'TEST JOB'
         steps:
-          - script: terraform init
+          - script: |
+              terraform init
+              terraform plan
+              terraform apply -auto-approve
