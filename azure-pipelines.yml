@@ -5,16 +5,25 @@ pool:
   name: default
 
 stages:
-  - stage: PullRequest
-    displayName: 'Pull Request'
+  - stage: terraformInt
+    displayName: 'terraform init'
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+    jobs:
+      - job: terraform_init
+        displayName: 'terraform init'
+        #condition: eq(variables['Build.Reason'], 'PullRequest')
+        steps:
+          - script: |
+              terraform init
+
+  - stage: terraformPlan
+    displayName: 'terraform plan'
     jobs:
       - job: terraform_plan
         displayName: 'terraform plan'
         condition: eq(variables['Build.Reason'], 'PullRequest')
         steps:
-          - script: echo "This step runs only for pull requests"
           - script: |
-              terraform init
               terraform plan
 
   - stage: MergeRequest
