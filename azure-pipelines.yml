@@ -5,7 +5,7 @@ pool:
   name: default
 
 stages:
-  - stage: terraformInt
+  - stage: terraformIntPR
     displayName: 'terraform init'
     jobs:
       - job: terraform_init
@@ -15,7 +15,7 @@ stages:
           - script: |
               terraform init
 
-  - stage: terraformValidate
+  - stage: terraformValidatePR
     displayName: 'terraform validate'
     jobs:
       - job: terraform_validate
@@ -25,12 +25,29 @@ stages:
           - script: |
               terraform validate
 
-  - stage: terraformPlan
+  - stage: terraformPlanPR
     displayName: 'terraform plan'
     jobs:
       - job: terraform_plan
         displayName: 'terraform plan'
         condition: eq(variables['Build.Reason'], 'PullRequest')
+        steps:
+          - script: |
+              terraform plan
+
+  - stage: terraformIntPush
+    displayName: 'terraform init'
+    jobs:
+      - job: terraform_init
+        displayName: 'terraform init'
+        steps:
+          - script: |
+              terraform init
+
+  - stage: terraformPlanPush
+    displayName: 'terraform plan'
+    jobs:
+      - job: terraform_plan
         steps:
           - script: |
               terraform plan
