@@ -5,18 +5,31 @@ pool:
   name: default
 
 stages:
-  - stage: Build
-    displayName: 'Build'
+  - stage: PullRequest
+    displayName: 'Pull Request'
     jobs:
-      - job: BuildJob
-        displayName: 'Build Job'
+      - job: terraform_plan
+        displayName: 'terraform plan'
         condition: eq(variables['Build.Reason'], 'PullRequest')
         steps:
           - script: echo "This step runs only for pull requests"
-      - job: testJob
-        displayName: 'TEST JOB'
-        steps:
           - script: |
               terraform init
               terraform plan
+
+  - stage: MergeRequest
+    displayName: 'Merge Request'
+    jobs:
+      - job: terraform_apply
+        displayName: 'terraform apply'
+        steps:
+          - script: echo "This step runs only when merging into main branch"
+          - script: |
+              terraform init
               terraform apply -auto-approve
+          
+      # - job: testJob
+      #   displayName: 'TEST JOB'
+      #   steps:
+      #     - script: |
+      #         terraform apply -auto-approve
