@@ -19,11 +19,22 @@ stages:
     displayName: 'PR terraform validate'
     jobs:
       - job: terraform_validate
-        displayName: 'terraform validate'
         condition: eq(variables['Build.Reason'], 'PullRequest')
         steps:
-          - script: |
-              terraform validate
+        - task: DownloadBuildArtifacts@1
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.ArtifactsDirectory)'
+
+        - script: |
+            cd '$(System.ArtifactsDirectory)'/drop
+            echo "Below is the current path"
+            pwd
+            echo "Setting execution mode"
+            chmod -R +x .terraform
+            terraform validate
 
 
   - stage: terraformPlanPR
