@@ -69,6 +69,7 @@ stages:
             cd '$(System.ArtifactsDirectory)'/drop
             echo "Below is the current path"
             pwd
+            chmod +x .terraform
             terraform plan
 
   - stage: MergeRequest
