@@ -6,17 +6,17 @@ pool:
 
 stages:
   - stage: terraformIntPR
-    displayName: 'terraform init'
+    displayName: 'PR terraform init'
     jobs:
       - job: terraform_init
-        displayName: 'pull request -> terraform init'
+        displayName: 'terraform init'
         condition: eq(variables['Build.Reason'], 'PullRequest')
         steps:
           - script: |
               terraform init
 
   - stage: terraformValidatePR
-    displayName: 'pull request -> terraform validate'
+    displayName: 'PR terraform validate'
     jobs:
       - job: terraform_validate
         displayName: 'terraform validate'
@@ -27,7 +27,7 @@ stages:
 
 
   - stage: terraformPlanPR
-    displayName: 'pull request -> terraform plan'
+    displayName: 'PR terraform plan'
     jobs:
       - job: terraform_plan
         condition: eq(variables['Build.Reason'], 'PullRequest')
@@ -48,7 +48,7 @@ stages:
             terraform plan
 
   - stage: terraformIntPush
-    displayName: 'terraform init'
+    displayName: 'Merge terraform init'
     jobs:
       - job: terraform_init
         displayName: 'Merge Request -> terraform init'
@@ -66,10 +66,10 @@ stages:
               #publishLocation: 'Container'
 
   - stage: MergeRequest
-    displayName: 'Merge Request'
+    displayName: 'Merge terrafoorm apply'
     jobs:
       - job: terraform_apply
-        displayName: 'Merge Request -> terraform apply'
+        displayName: 'terraform apply'
         steps:
         - task: DownloadBuildArtifacts@1
           inputs:
