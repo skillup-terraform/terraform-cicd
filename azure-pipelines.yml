@@ -5,15 +5,23 @@ pool:
   name: default
 
 stages:
-  - stage: terraformIntPR
-    displayName: 'PR terraform init'
+  - stage: terraformInt
+    displayName: 'terraform init'
     jobs:
       - job: terraform_init
         displayName: 'terraform init'
-        condition: eq(variables['Build.Reason'], 'PullRequest')
+        condition: always()
         steps:
           - script: |
               terraform init
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder: $(Build.SourcesDirectory)
+              targetFolder: $(Build.ArtifactStagingDirectory)  
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
 
   - stage: terraformValidatePR
     displayName: 'PR terraform validate'
@@ -58,23 +66,6 @@ stages:
             chmod -R +x .terraform
             terraform plan
 
-  - stage: terraformIntPush
-    displayName: 'Merge terraform init'
-    jobs:
-      - job: terraform_init
-        displayName: 'Merge Request -> terraform init'
-        steps:
-          - script: |
-              terraform init
-          - task: CopyFiles@2
-            inputs:
-              sourceFolder: $(Build.SourcesDirectory)
-              targetFolder: $(Build.ArtifactStagingDirectory)  
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              #publishLocation: 'Container'
 
   - stage: MergeRequest
     displayName: 'Merge terrafoorm apply'
