@@ -43,6 +43,10 @@ stages:
         steps:
           - script: |
               terraform init
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder: $(Build.SourcesDirectory)
+              targetFolder: $(Build.ArtifactStagingDirectory)  
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -54,8 +58,14 @@ stages:
     jobs:
       - job: terraform_plan
         steps:
-          - script: |
-              terraform plan
+        - task: DownloadBuildArtifacts@1
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.ArtifactsDirectory)'
+
+        - script: terraform plan
 
   - stage: MergeRequest
     displayName: 'Merge Request'
