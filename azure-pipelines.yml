@@ -65,7 +65,11 @@ stages:
             artifactName: 'drop'
             downloadPath: '$(System.ArtifactsDirectory)'
 
-        - script: terraform plan
+        - script: |
+            cd '$(System.ArtifactsDirectory)'
+            echo "Below is the current path"
+            pwd
+            terraform plan
 
   - stage: MergeRequest
     displayName: 'Merge Request'
