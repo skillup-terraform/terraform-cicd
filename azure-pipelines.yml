@@ -66,7 +66,7 @@ stages:
             downloadPath: '$(System.ArtifactsDirectory)'
 
         - script: |
-            cd '$(System.ArtifactsDirectory)'
+            cd '$(System.ArtifactsDirectory)'/drop
             echo "Below is the current path"
             pwd
             terraform plan
