@@ -72,7 +72,7 @@ stages:
     jobs:
       - job: terraform_apply
         displayName: 'terraform apply'
-        condition: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
         steps:
         - task: DownloadBuildArtifacts@1
           inputs:
