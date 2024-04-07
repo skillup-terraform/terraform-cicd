@@ -5,29 +5,48 @@ pool:
   name: default
 
 stages:
-  - stage: terraformIntPR
+  - stage: terraformInt
     displayName: 'terraform init'
     jobs:
       - job: terraform_init
-        displayName: 'pull request -> terraform init'
-        condition: eq(variables['Build.Reason'], 'PullRequest')
+        displayName: 'terraform init'
+        condition: always()
         steps:
           - script: |
               terraform init
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder: $(Build.SourcesDirectory)
+              targetFolder: $(Build.ArtifactStagingDirectory)  
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
 
   - stage: terraformValidatePR
-    displayName: 'pull request -> terraform validate'
+    displayName: 'PR terraform validate'
     jobs:
       - job: terraform_validate
-        displayName: 'terraform validate'
         condition: eq(variables['Build.Reason'], 'PullRequest')
         steps:
-          - script: |
-              terraform validate
+        - task: DownloadBuildArtifacts@1
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.ArtifactsDirectory)'
+
+        - script: |
+            cd '$(System.ArtifactsDirectory)'/drop
+            echo "Below is the current path"
+            pwd
+            echo "Setting execution mode"
+            chmod -R +x .terraform
+            terraform validate
 
 
   - stage: terraformPlanPR
-    displayName: 'pull request -> terraform plan'
+    displayName: 'PR terraform plan'
     jobs:
       - job: terraform_plan
         condition: eq(variables['Build.Reason'], 'PullRequest')
@@ -47,29 +66,13 @@ stages:
             chmod -R +x .terraform
             terraform plan
 
-  - stage: terraformIntPush
-    displayName: 'terraform init'
-    jobs:
-      - job: terraform_init
-        displayName: 'Merge Request -> terraform init'
-        steps:
-          - script: |
-              terraform init
-          - task: CopyFiles@2
-            inputs:
-              sourceFolder: $(Build.SourcesDirectory)
-              targetFolder: $(Build.ArtifactStagingDirectory)  
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              #publishLocation: 'Container'
 
   - stage: MergeRequest
-    displayName: 'Merge Request'
+    displayName: 'Merge terrafoorm apply'
     jobs:
       - job: terraform_apply
-        displayName: 'Merge Request -> terraform apply'
+        displayName: 'terraform apply'
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
         steps:
         - task: DownloadBuildArtifacts@1
           inputs:
