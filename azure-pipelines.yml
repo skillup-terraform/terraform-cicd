@@ -1,4 +1,9 @@
 trigger:
+  branches:
+    include:
+    - main
+
+pr:
 - main
 
 pool:
@@ -88,10 +93,5 @@ stages:
             echo "Setting execution mode"
             chmod -R +x .terraform
             terraform destroy -auto-approve
-          
-      # - job: testJob
-      #   displayName: 'TEST JOB'
-      #   steps:
-      #     - script: |
-      #         terraform apply -auto-approve
+
       
