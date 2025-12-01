@@ -7,3 +7,5 @@ variable "security_group" {
   type = list(string)
   default = ["sg-075d9dc319f0a8390"]
 }
+
+   
